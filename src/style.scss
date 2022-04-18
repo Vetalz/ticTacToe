@@ -1,3 +1,64 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
 h1 {
-  color: green;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.status {
+  margin-bottom: 25px;
+}
+
+.row {
+  display: flex;
+  font-size: 72px;
+  font-weight: bold;
+}
+
+.square {
+  width: 82px;
+  height: 82px;
+  border: 3px solid #adb5bd;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cross {
+  color: #2a9d8f;
+}
+
+.toe {
+  color: #e76f51;
+}
+
+.btn {
+  margin-top: 25px;
+  text-align: center;
+}
+
+button {
+  background-color: #13aa52;
+  border: 1px solid #13aa52;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 25px;
+}
+
+button:hover {
+  background-color: #0f8f44;
+  border: 1px solid #13aa52;
 }
