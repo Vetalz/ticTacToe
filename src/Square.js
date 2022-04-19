@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import Context from "./context/Context";
 
-const Square = ({value, index, chooseSquare}) => {
+const Square = ({index}) => {
+  const context = useContext(Context);
+
   return (
-    <div onClick={() => chooseSquare(index)} className={`square ${value === 'X' ? 'cross' : 'toe'}`}>
-      <span>{value}</span>
+    <div onClick={() => context.chooseSquare(index)} className={`square ${context.values[index] === 'X' ? 'cross' : 'toe'}`}>
+      <span>{context.values[index]}</span>
     </div>
   );
 };

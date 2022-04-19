@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import Button from "./Button";
 import Status from "./Status";
 import Field from "./Field";
 import checkPatterns from "./checkPattern";
+import Context from "./context/Context";
 
 const App = () => {
   const [player, setPlayer] = useState('X');
@@ -10,7 +11,7 @@ const App = () => {
   const [text, setText] = useState('Next player:');
   const [isEnd, setIsEnd] = useState(false);
 
-  function chooseSquare(idx) {
+  const chooseSquare = useCallback((idx) => {
     if (!isEnd) {
       setValues(() => {
         if (values[idx] === '') {
@@ -28,7 +29,14 @@ const App = () => {
         return values;
       });
     }
-  }
+  },[player, isEnd]);
+
+  const playAgain = useCallback(() => {
+    setValues(new Array(9).fill(''));
+    setText('Next player:');
+    setPlayer('X');
+    setIsEnd(false);
+  }, [isEnd]);
 
   useEffect(checkResult, values);
 
@@ -60,17 +68,14 @@ const App = () => {
     }
   }
 
-  function playAgain() {
-    setValues(new Array(9).fill(''));
-    setText('Next player:');
-    setPlayer('X');
-    setIsEnd(false);
-  }
-
   return (
     <React.Fragment>
       <Status text={text} player={player}/>
-      <Field values={values} chooseSquare={chooseSquare}/>
+      <Context.Provider value={
+        {values, chooseSquare}
+      }>
+        <Field />
+      </Context.Provider>
       <Button playAgain={playAgain}/>
     </React.Fragment>
   );
