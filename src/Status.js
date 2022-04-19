@@ -1,9 +1,14 @@
 import React from 'react';
 
-const Status = ({text, player}) => {
+const Status = ({player, winner, isEnd}) => {
   return (
     <div className='status'>
-      <h1><span>{text}</span> <span>{player}</span></h1>
+      {isEnd
+        ? winner
+          ? <h1><span>Winner:</span> <span>{winner}</span></h1>
+          : <h1><span>Draw</span></h1>
+        : <h1><span>Next player:</span> <span>{player}</span></h1>
+      }
     </div>
   );
 };

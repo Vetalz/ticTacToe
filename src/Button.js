@@ -3,7 +3,7 @@ import React from 'react';
 const Button = ({playAgain}) => {
   return (
     <div className='btn'>
-      <button onClick={() => playAgain()}>Play again</button>
+      <button onClick={playAgain}>Play again</button>
     </div>
   );
 };

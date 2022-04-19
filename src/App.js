@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import Button from "./Button";
 import Status from "./Status";
 import Field from "./Field";
@@ -8,8 +8,33 @@ import Context from "./context/Context";
 const App = () => {
   const [player, setPlayer] = useState('X');
   const [values, setValues] = useState(new Array(9).fill(''));
-  const [text, setText] = useState('Next player:');
-  const [isEnd, setIsEnd] = useState(false);
+
+  const winner = useMemo(() => {
+    for (let i = 0; i < checkPatterns.length; i++) {
+      if (values[checkPatterns[i][0]] === '') {
+        continue;
+      }
+
+      if (values[checkPatterns[i][0]] === values[checkPatterns[i][1]] &&
+        values[checkPatterns[i][0]] === values[checkPatterns[i][2]]) {
+        return values[checkPatterns[i][0]];
+      }
+    }
+    return null;
+  }, [values])
+
+  const isDraw = useMemo(() => {
+    let filled = true;
+    for (const value of values) {
+      if (value === '') {
+        filled = false;
+      }
+    }
+    return filled;
+
+  }, [values])
+
+  const isEnd = useMemo(() => winner || isDraw, [winner, isDraw])
 
   const chooseSquare = useCallback((idx) => {
     if (!isEnd) {
@@ -33,44 +58,12 @@ const App = () => {
 
   const playAgain = useCallback(() => {
     setValues(new Array(9).fill(''));
-    setText('Next player:');
     setPlayer('X');
-    setIsEnd(false);
   }, [isEnd]);
-
-  useEffect(checkResult, values);
-
-  function checkResult() {
-    let filled = true;
-    for (const value of values) {
-      if (value === '') {
-        filled = false;
-      }
-    }
-
-    for (let i = 0; i < checkPatterns.length; i++) {
-      if (values[checkPatterns[i][0]] === '') {
-        continue;
-      }
-
-      if (values[checkPatterns[i][0]] === values[checkPatterns[i][1]] &&
-        values[checkPatterns[i][0]] === values[checkPatterns[i][2]]) {
-        setText('Winner:');
-        setPlayer(values[checkPatterns[i][0]]);
-        setIsEnd(true);
-        return;
-      }
-    }
-
-    if (filled) {
-      setText('Draw');
-      setPlayer('');
-    }
-  }
 
   return (
     <React.Fragment>
-      <Status text={text} player={player}/>
+      <Status player={player} winner={winner} isEnd={isEnd}/>
       <Context.Provider value={
         {values, chooseSquare}
       }>
